@@ -9,7 +9,7 @@
 	<meta name="description" content="Blog by Kamil Misiak" />
 	<meta name="keywords" content="Blog, mikroblog" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<link rel="stylesheet" href="style1.css" type="text/css" />
+	<link rel="stylesheet" href="main.css" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 </head>
@@ -21,7 +21,7 @@
 				<li><a href="index.php">Strona główna</a></li>
 				<li><a href="omnie.php">O mnie</a></li>
 				<li><a href="wpis.php">Przykładowy post</a></li>
-				<li><a href="konatkt.php">Kontakt</a></li>
+				<li><a href="kontakt.php">Kontakt</a></li>
 				<?php 
 				if (!isset($_SESSION['zalogowany']))
 				{
@@ -47,7 +47,7 @@
 			<a href="index.php"><div class="optionL">Strona główna</div></a>
 			<a href="omnie.php"><div class="optionL">O mnie</div></a>
 			<a href="wpis.php"><div class="optionL">Przykładowy post</div></a>
-			<a href="#.html"><div class="optionL">Kontakt</div></a>
+			<a href="kontakt.html"><div class="optionL">Kontakt</div></a>
 			<?php 
 				if (!isset($_SESSION['zalogowany']))
 				{

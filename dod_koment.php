@@ -10,18 +10,18 @@
 	if($polaczenie->connect_errno) {
 		echo "Error: ".$polaczenie->connect_errno;
 	} else {
-		$tytul = $_POST['tytul'];
-		$text = $_POST['post'];
-		$id = $_SESSION['id'];
+		$uzytkownik = $_POST['uzytkownik'];
+		$tresc = $_POST['komentarz'];
+		$id = $_GET['id'];
+
 		$polaczenie->query('SET NAMES utf8');
-		$sql = "insert into posty (tytul, text, data, id_uzytkownika) values ('$tytul','$text', now(), '$id')";
+		$sql = "insert into komentarze (tresc, uzytkownik, data, id_wpisu) values ('$tresc','$uzytkownik', now(), '$id')";
 
 		$polaczenie->query($sql);
-		$polaczenie->query("commit");
-		header("Location: new.php");
+		$link = "wpis.php?id=".$id;
+		header("Location: $link");
 		$polaczenie->close();
 	}
 	} catch(Exception $e) {
 	}
 ?>
- 

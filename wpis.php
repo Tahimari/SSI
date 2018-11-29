@@ -1,5 +1,7 @@
 <?php
 	session_start();
+	@$id = $_GET['id'];
+	$link = "dod_koment.php?id=".$id;
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -9,7 +11,8 @@
 	<meta name="description" content="Blog by Kamil Misiak" />
 	<meta name="keywords" content="Blog, mikroblog" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<link rel="stylesheet" href="style1.css" type="text/css" />
+	<link rel="stylesheet" href="main.css" type="text/css" />
+	<link rel="stylesheet" href="komentarze.css" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 </head>
@@ -54,25 +57,88 @@
 				?>
 		</div>
 		
-		<div id="content">
-			<span class="bigtitle">Przykładowy wpis</span>
-			
-			<div class="dottedline"></div>
-			
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia mollis odio eu bibendum. Praesent non hendrerit risus. Nulla id semper sem. Mauris risus mauris, ultrices sed ullamcorper sed, vulputate vel nisi. Aliquam augue ante, mattis in pulvinar vitae, ultrices nec leo. Nulla ultricies augue enim, sit amet semper tellus vulputate sit amet. Maecenas tincidunt, ex eu viverra scelerisque, quam lectus auctor nunc, at pretium nibh lacus in ligula. Cras condimentum felis ac aliquet tristique. Sed elementum eu nulla vel rutrum. Cras feugiat nulla non congue malesuada.
-			
-			<br /><br />
-			Cras et nulla vehicula, efficitur enim non, fermentum tortor. Curabitur id elementum leo. Sed eget turpis accumsan dolor mollis imperdiet. Praesent pellentesque laoreet lectus, at commodo magna varius vitae. Aliquam erat volutpat. Curabitur commodo, tortor laoreet sagittis cursus, nulla enim laoreet libero, et egestas risus ante vel orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc quis posuere massa, sed sollicitudin lorem. Mauris lacinia, massa efficitur malesuada luctus, arcu ex mattis erat, a venenatis magna risus nec neque. Nulla vulputate nisl urna, quis egestas orci suscipit tristique. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras auctor nec elit at ultricies. Morbi aliquam pharetra diam, vitae porta felis. Pellentesque vel arcu tincidunt, luctus justo quis, ultrices erat. Vivamus efficitur leo vitae dui molestie, eu varius sapien iaculis. In quis pharetra mauris.
-			
-			<br /><br />			
-			Nam ullamcorper turpis non tristique sollicitudin. Etiam id magna lacus. Pellentesque vestibulum ex eget quam consectetur, sit amet luctus erat feugiat. Sed gravida tellus tempus consequat rhoncus. Phasellus lobortis magna et risus pharetra, facilisis blandit sapien tristique. Vivamus aliquam interdum arcu, eget facilisis ante gravida ut. Proin nec nisl ut lacus finibus sagittis id non nibh. Donec volutpat pretium libero. Sed fermentum vel ante vitae mattis. Curabitur porttitor turpis at scelerisque auctor. Sed vitae iaculis risus, ut iaculis nibh.
-		</div>	
+			<div id="content">
+			<?php
+			require_once"connect.php";
+			try {
+			$polaczenie = new mysqli($host, $db_user, $db_password, $db_name);
+			if($polaczenie->connect_errno) {
+				echo "Error: ".$polaczenie->connect_errno;
+			} else {
+				if(!$id){
+					$sql = "Select * from posty";
+				} else {
+					$sql = "Select * from posty where id_wpisu='$id'";
+				}
+					$polaczenie->query('SET NAMES utf8');
+					if($rezultat = @$polaczenie->query($sql)) {
+							$wiersz = $rezultat->fetch_assoc();
+							echo '<span class="bigtitle"> ';
+							echo $wiersz['tytul'];
+							echo '</span>';
+							echo '<div class="dottedline"></div>';
+							echo '<div class="text">';
+							echo $wiersz['text'];
+							echo '</div>';
+							echo '<br />';
+							echo '<span class="date">';
+							echo $wiersz['data'];
+							echo '</span>';
+			}
+			$polaczenie->close();
+			}
+			} catch(Exception $e) {
+			}
+			?>
+			<br />
+			<br />
+			<br /><br /><br /><br /><br />
+			<form name="dodaj_komentarz" action=<?php echo $link?> method="post">
+			użytkownik: <input type="text" name="uzytkownik">
+			<br/>
+			komentarz: <input type="text" name="komentarz" id="com">
+			<br/>
+			<input type="submit" value="Wyślij">
+			</form>
 		
+
+
+
+			<br/><br/>
+			<div id="dodaj_komentarz">
+			komentarze:<br/></br/>
+			<?php
+			require_once"connect.php";
+			$polaczenie = @new mysqli($host, $db_user, $db_password, $db_name);
+			if($polaczenie->connect_errno) {
+				echo "Error: ".$polaczenie->connect_errno;
+			} else {
+				$polaczenie->query('SET NAMES utf8');
+				$sql = "Select * from komentarze where id_wpisu ='$id'";
+				if($rezultat = @$polaczenie->query($sql)) {
+						for( $i=0; $i<$rezultat->num_rows; $i++ ) {
+						$wiersz = $rezultat->fetch_assoc();
+						echo '<span id="uzytkownik">';
+						echo $wiersz['uzytkownik'];
+						echo '</span></br><class="text">';
+						echo $wiersz['tresc'];
+						echo '<span class="date">';
+						echo $wiersz['data'];
+						echo '</span>';
+						echo '<div class="dottedline"></div>';
+						echo '<class/>';
+				}
+			}
+			$polaczenie->close();
+			}
+			?>
+			<br />
+			<br />
+		</div>	
+
+		</div>		
 		<div id="footer">
 			Blog by Kamil Misiak &copy; Wszelkie prawa zastrzeżone
 		</div>
-	
-	</div>
-	
 </body>
 </html>

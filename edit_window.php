@@ -5,6 +5,9 @@
 		header('Location: index.php');
 		exit();
 	}
+
+	$_SESSION['id_wpisu'] = $_GET['id'];
+	$wiersz = require_once"fetchData.php";
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -15,6 +18,7 @@
 	<meta name="keywords" content="Blog, mikroblog" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<link rel="stylesheet" href="main.css" type="text/css" />
+	<link rel="stylesheet" href="panel_administratora.css" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 </head>
@@ -41,38 +45,16 @@
 			<a href="delete.php"><div class="optionL">Usuń post</div></a>
 		</div>
 		
-			<div id="content">
-			<span class="bigtitle">Edytuj wpis</span><br/><br/>
-			<?php
-			require_once"connect.php";
-			$polaczenie = @new mysqli($host, $db_user, $db_password, $db_name);
-			if($polaczenie->connect_errno) {
-				echo "Error: ".$polaczenie->connect_errno;
-			} else {
-				//$id = $_SESSION['id'];
-				$id = 5;
-				$polaczenie->query('SET NAMES utf8');
-				$sql = "Select * from posty where id_uzytkownika ='$id'";
-				if($rezultat = @$polaczenie->query($sql)) {
-						for( $i=0; $i<$rezultat->num_rows; $i++ ) {
-						$wiersz = $rezultat->fetch_assoc();
-						$link = "edit_window.php?id=".$wiersz['id_wpisu'];
-						echo '<a id="confirm" href='.$link.' ><span class="text">';
-						echo $wiersz['tytul'];
-						echo '</span>';
-						echo '<div class="dottedline"></div>';
-						echo '<a/>';
-				}
-			}
-			$polaczenie->close();
-			}
-			?>
-			<br />
-			<br />
-		</div>
+		<div id="new">
+			<span class="bigtitle">Dokonaj zmian</span>
 
-		<script type="text/javascript" charset="utf-8">
-		</script>
+			<form action="edytuj.php" method="post">
+			<textarea id="tytul" name='tytul' rows="1" cols="119"><?php echo $wiersz['tytul'];?></textarea> 
+			<textarea id="post" name='post' rows="10" cols="30"><?php echo $wiersz['text'];?></textarea>
+			<input type="submit" value="Wyslij">
+		</form>
+		</div>
+	</div>
 		
 		<div id="footer">
 			Blog by Kamil Misiak &copy; Wszelkie prawa zastrzeżone

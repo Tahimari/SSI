@@ -6,12 +6,12 @@
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
-	<meta charset="utf-8" />
+	<meta charset="UTF-8" />
 	<title>Blog</title>
 	<meta name="description" content="Blog by Kamil Misiak" />
 	<meta name="keywords" content="Blog, mikroblog" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<link rel="stylesheet" href="style1.css" type="text/css" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" charset=utf-8/>
+	<link rel="stylesheet" href="main.css" type="text/css" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 </head>
@@ -63,19 +63,39 @@
 		</div>
 		
 		<div id="content">
-			<a href="wpis.html"><span class="bigtitle"> <?php
-			require("fetchData.php");
-			echo $tytul;
+			<?php
+			require_once"connect.php";
+			try {
+			$polaczenie = new mysqli($host, $db_user, $db_password, $db_name);
+			if($polaczenie->connect_errno) {
+				echo "Error: ".$polaczenie->connect_errno;
+			} else {
+				//$id = $_SESSION['id'];
+				$id = 5;
+				$polaczenie->query('SET NAMES utf8');
+				$sql = "select * from posty where id_uzytkownika = '$id'";
+				if($rezultat = @$polaczenie->query($sql)) {
+						for( $i=0; $i<$rezultat->num_rows; $i++ ) {
+						$wiersz = $rezultat->fetch_assoc();
+						$link = "wpis.php?id=".$wiersz['id_wpisu'];
+						echo '<a href='.$link.'><span class="bigtitle"> ';
+						echo $wiersz['tytul'];
+						echo '</span>';
+						echo '<div class="dottedline"></div>';
+						echo '<div class="text">';
+						echo substr($wiersz['text'],0,1000);
+						echo '...</div>';
+						echo '<br />';
+						echo '<span class="date">';
+						echo $wiersz['data'];
+						echo '</span><a/><br/><br/><br/>';
+				}
+			}
+			$polaczenie->close();
+			}
+			} catch(Exception $e) {
+			}
 			?>
-			</span>
-			<div class="dottedline"></div>
-			<div class="text"><?php
-			echo $tresc;
-			?> </div>
-			<br />
-			<span class="date"><?php
-			echo $data;
-			?></span></a>
 			<br />
 			<br />
 		</div>
