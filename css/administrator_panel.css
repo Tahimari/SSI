@@ -1,0 +1,50 @@
+#new {
+	float: left;
+	padding: 40px;
+	width: 730px;
+	background-color: #dedede;
+	min-height: 580px;
+}
+
+input[type=text] {
+	width: 730px;
+	min-height: 50px;
+	font-size: 30px;
+}
+
+#title {
+	width: 730px;
+	height: 50px;
+	font-size: 30px;
+}
+
+#post {
+	width: 730px;
+	height: 400px;
+	font-size: 20px;
+}
+
+input[type=submit] {
+	width: 300px;
+	background-color: #404040;
+	font-size:20px;
+	color: white;
+	padding: 15px 10px;
+	margin-top: 20px;
+	margin-left: 225px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	letter-spacing: 2px;
+	outline: none;
+}
+
+input[type=submit]:focus {
+	-webkit-box-shadow: 0px 0px 15px 5px rgba(40,40,40,0.9);
+	-moz-box-shadow: 0px 0px 15px 5px rgba(40,40,40,0.9);
+	box-shadow: 0px 0px 15px 5px rgba(40,40,40,0.9);
+}
+
+input[type=submit]:hover {
+	background-color: #000000;
+}
